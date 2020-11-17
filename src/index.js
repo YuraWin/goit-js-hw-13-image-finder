@@ -17,8 +17,8 @@ function fetchImages(searchText) {
         .then(cards => cards.hits);
 }
         
-fetchImages('cat').then(cards=>console.log(cards));
-console.log(refs.searchForm);
-console.log(refs.gallery);
-console.log(refs.nextButton);
+fetchImages('cat').then(cards => {
+    const cardsMarkup = cardTpl(cards);
+    refs.gallery.insertAdjacentHTML('beforeend', cardsMarkup);
+});
 
