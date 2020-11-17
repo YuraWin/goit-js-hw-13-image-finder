@@ -5,9 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Homework 13 image-finder</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   </head>
 
   <body>
     
+    <form class="search-form" id="search-form">
+      <input type="text" name="query" autocomplete="off" placeholder="Search images..." />
+    </form>
+
+    <ul class="gallery">
+      
+        <div class="photo-card">
+          <!-- <img src="" alt="" /> -->
+        
+          <div class="stats">
+            <p class="stats-item">
+              <i class="material-icons">thumb_up</i>
+              1108
+            </p>
+            <p class="stats-item">
+              <i class="material-icons">visibility</i>
+              320321
+            </p>
+            <p class="stats-item">
+              <i class="material-icons">comment</i>
+              129
+            </p>
+            <p class="stats-item">
+              <i class="material-icons">cloud_download</i>
+              176019
+            </p>
+          </div>
+        </div>
+    </ul>
+<button class="btn-more js-btn-more">Load more</button>
   </body>
 </html>
