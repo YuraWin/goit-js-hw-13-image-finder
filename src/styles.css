@@ -17,17 +17,32 @@ body {
    * CSS image reference example.
    */
   /* background-image: url('./images/bg-pattern.png'); */
+  text-align: center;
+}
+.search-input {
+  width: 350px;
+  height: 25px;
+  padding-left: 10px;
+  border-radius: 5px;
+  border-color: rgb(187, 181, 181);
+  font-size: 15px;
+  outline: none;
+  box-shadow: 1px 3px 8px -1px #757575;
 }
 
 .gallery {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  padding: 0;
+  list-style: none;
+}
+.gallery > .item {
+  margin: 10px;
 }
 .photo-card {
   display: inline-block;
-  max-width: 320px;
-  margin: 10px;
+  width: 320px;
   overflow: hidden;
   box-shadow: 1px 3px 8px -1px #757575;
 }
@@ -45,4 +60,15 @@ body {
 .material-icons {
   margin-right: 5px;
   color: grey;
+}
+
+.btn-more {
+  height: 25px;
+  padding-left: 10px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.btn-more.is-hidden {
+  display: none;
 }

@@ -20,6 +20,7 @@ function onSearch(e) {
 
     if (apiService.query === '') {
         clearImagesGallery();
+        refs.loadMoreBtn.classList.add('is-hidden');
         console.log('To do new query'); // проверка на пустой запрос
         return
     }
@@ -28,19 +29,25 @@ function onSearch(e) {
         clearImagesGallery();
 
         if (cards.length === 0) {
-            console.log('Неверный заапрос, сделайте другой запрос'); // проверка на неверный запрос
+            refs.loadMoreBtn.classList.add('is-hidden');
+            console.log('Неверный запрос, сделайте другой запрос'); // проверка на неверный запрос
             return
         }
 
         appendImagesMarkUp(cards);
+        refs.loadMoreBtn.classList.remove('is-hidden');
     });
 }
 
-function onLoadMore() {
+function onLoadMore(e) {
     apiService.fetchImages().then(cards => {
-        
+        const stepScrollY = pageYOffset+e.clientY-30;
+
         appendImagesMarkUp(cards)
-    });
+
+        window.scrollTo({ top: stepScrollY, behavior:"smooth"})
+    })
+       
 };
 
 
