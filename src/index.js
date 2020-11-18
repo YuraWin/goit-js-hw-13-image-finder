@@ -1,24 +1,55 @@
 import './styles.css';
 import cardTpl from './template/photo-card.hbs';
-const debounce = require('lodash.debounce');
+import ApiServise from './js/apiService';
+
+const apiService = new ApiServise;
 
 const refs = {
     searchForm: document.querySelector('#search-form'),
-    gallery: document.querySelector('.gallery'),
-    nextButton: document.querySelector('.js-btn-more'),
+    galleryContainer: document.querySelector('.gallery'),
+    loadMoreBtn: document.querySelector('.js-btn-more'),
 }
 
+refs.searchForm.addEventListener('submit', onSearch);
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
-function fetchImages(searchText) {
-    const BASE_URL = 'https://pixabay.com/api';
-    const API_KEY = '19030370-3b0ac62398e7506ebf605c4ab'
-    return fetch(`${BASE_URL}/?image_type=photo&orientation=horizontal&q=${searchText}&page=1&per_page=12&key=${API_KEY}`)
-        .then(resp => resp.json())
-        .then(cards => cards.hits);
+function onSearch(e) {
+    e.preventDefault();
+    apiService.query = e.target.elements.query.value;
+    apiService.resetPage();
+
+    if (apiService.query === '') {
+        clearImagesGallery();
+        console.log('To do new query'); // проверка на пустой запрос
+        return
+    }
+
+    apiService.fetchImages().then(cards => {
+        clearImagesGallery();
+
+        if (cards.length === 0) {
+            console.log('Неверный заапрос, сделайте другой запрос'); // проверка на неверный запрос
+            return
+        }
+
+        appendImagesMarkUp(cards);
+    });
 }
+
+function onLoadMore() {
+    apiService.fetchImages().then(cards => {
         
-fetchImages('cat').then(cards => {
-    const cardsMarkup = cardTpl(cards);
-    refs.gallery.insertAdjacentHTML('beforeend', cardsMarkup);
-});
+        appendImagesMarkUp(cards)
+    });
+};
 
+
+function appendImagesMarkUp(cards) {
+    refs.galleryContainer.insertAdjacentHTML('beforeend', cardTpl(cards));
+}
+
+function clearImagesGallery() {
+    refs.galleryContainer.innerHTML = '';
+}
+
+    

@@ -27,10 +27,22 @@ body {
 .photo-card {
   display: inline-block;
   max-width: 320px;
+  margin: 10px;
+  overflow: hidden;
+  box-shadow: 1px 3px 8px -1px #757575;
 }
 .photo-card-img {
+  height: 230px;
   width: 100%;
 }
 .stats {
   display: flex;
+  justify-content: space-evenly;
+}
+.stats-item {
+  display: flex;
+}
+.material-icons {
+  margin-right: 5px;
+  color: grey;
 }
