@@ -6,6 +6,7 @@ const apiService = new ApiServise;
 
 const refs = {
     searchForm: document.querySelector('#search-form'),
+    infoMessage:document.querySelector('.search-form-message'),
     galleryContainer: document.querySelector('.gallery'),
     loadMoreBtn: document.querySelector('.js-btn-more'),
 }
@@ -17,39 +18,43 @@ function onSearch(e) {
     e.preventDefault();
     apiService.query = e.target.elements.query.value;
     apiService.resetPage();
-
-    if (apiService.query === '') {
+    onInfoMessage('');
+    hideLoadMoreBtn();
+    
+    if (apiService.query === '') {    // проверка на пустой запрос
         clearImagesGallery();
-        refs.loadMoreBtn.classList.add('is-hidden');
-        console.log('To do new query'); // проверка на пустой запрос
+        onInfoMessage('Enter value for search');  
         return
     }
 
     apiService.fetchImages().then(cards => {
         clearImagesGallery();
 
-        if (cards.length === 0) {
-            refs.loadMoreBtn.classList.add('is-hidden');
-            console.log('Неверный запрос, сделайте другой запрос'); // проверка на неверный запрос
+        if (cards.length === 0) {    // проверка на неверный запрос
+            hideLoadMoreBtn();
+            onInfoMessage('Not found results, please change your search query');
             return
         }
 
         appendImagesMarkUp(cards);
-        refs.loadMoreBtn.classList.remove('is-hidden');
+
+        if (cards.length === 12) {   //проверка на наличие картинок для след загрузки
+            visibleLoadMoreBtn()
+        }
     });
 }
 
 function onLoadMore(e) {
     apiService.fetchImages().then(cards => {
-        const stepScrollY = pageYOffset+e.clientY-30;
-
+        const stepScroll = pageYOffset+e.clientY-30;
         appendImagesMarkUp(cards)
+        onScrollToScreen(stepScroll);
 
-        window.scrollTo({ top: stepScrollY, behavior:"smooth"})
+        if (cards.length < 12) {   //проверка на наличие картинок для след загрузки
+            hideLoadMoreBtn();
+        }
     })
-       
 };
-
 
 function appendImagesMarkUp(cards) {
     refs.galleryContainer.insertAdjacentHTML('beforeend', cardTpl(cards));
@@ -59,4 +64,18 @@ function clearImagesGallery() {
     refs.galleryContainer.innerHTML = '';
 }
 
-    
+function onInfoMessage(text) {
+    refs.infoMessage.textContent = text;
+}
+
+function onScrollToScreen(position) {
+    window.scrollTo({ top: position, behavior:"smooth"})
+}
+
+function hideLoadMoreBtn() {
+ refs.loadMoreBtn.classList.add('is-hidden');   
+}    
+
+function visibleLoadMoreBtn() {
+refs.loadMoreBtn.classList.remove('is-hidden');
+} 
